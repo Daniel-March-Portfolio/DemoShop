@@ -1,0 +1,47 @@
+version: "3"
+services:
+  django:
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      SECRET_KEY: ${SECRET_KEY}
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+      STRIPE_BACK_URL: ${DOMAIN}
+    hostname: django
+    depends_on:
+      postgres:
+        condition: service_healthy
+    entrypoint: python3 manage.py runserver 0.0.0.0:80
+
+  postgres:
+    image: "postgres:15"
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    hostname: ${DATABASE_HOST}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 2s
+      retries: 10
+    volumes:
+      - ${POSTGRES_DATA_VOLUME_DIR}:/var/lib/postgresql/data
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    restart: unless-stopped
+    hostname: nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - "django"
+    volumes:
+      - ./static:/static
