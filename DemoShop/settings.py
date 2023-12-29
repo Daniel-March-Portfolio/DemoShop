@@ -127,3 +127,10 @@ STATIC_ROOT = BASE_DIR / "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# DRF
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'DemoShop.pagination.NoDomainLimitOffsetPagination',
+    'PAGE_SIZE': 2
+}
