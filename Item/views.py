@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
 
@@ -12,3 +13,5 @@ class ItemViewSet(ModelViewSet):
     permission_classes = [
         permissions.DjangoModelPermissionsOrAnonReadOnly
     ]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["category"]
