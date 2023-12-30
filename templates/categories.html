@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/categories.css' %}" rel="stylesheet"/>
+    <script src="{% static 'js/categories.js' %}" type="application/javascript"></script>
+</head>
+<body>
+<header>
+    <div id="header-logo">DemoShop</div>
+    <a class="header-link" href="/carts">Cart</a>
+</header>
+<main>
+    <div id="categories"></div>
+</main>
+<script>
+    loadCategories()
+</script>
+</body>
+</html>

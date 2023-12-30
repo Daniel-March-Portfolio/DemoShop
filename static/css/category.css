@@ -1,0 +1,26 @@
+#category_title {
+    font-weight: bold;
+}
+
+#items {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    gap: 0.5rem;
+}
+
+.item {
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: #1e347b;
+    color: white;
+    border-radius: 0.5rem;
+}
+.item-title{
+    font-weight: bold;
+}
+.item-description{
+
+}
+.item-price{
+    font-weight: bold;
+}

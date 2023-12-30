@@ -1,0 +1,14 @@
+
+#categories {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 0.5rem;
+}
+
+.category {
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: #1e347b;
+  color: white;
+  border-radius: 0.5rem;
+}

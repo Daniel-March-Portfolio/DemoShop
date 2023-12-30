@@ -1,0 +1,25 @@
+header {
+    position: fixed;
+    width: 100%;
+    background-color: lightblue;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.header-link {
+    color: black;
+    cursor: pointer;
+}
+
+#header-logo {
+    font-weight: bold;
+    padding-right: 1rem;
+}
+
+main {
+    margin: 4rem auto auto;
+    max-width: 1200px;
+}
