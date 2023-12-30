@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DemoShop</title>
+    <link href="{% static 'css/main.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/carts.css' %}" rel="stylesheet"/>
+    <script src="{% static 'js/carts.js' %}" type="application/javascript"></script>
+    <script src="{% static 'js/main.js' %}" type="application/javascript"></script>
+</head>
+<body>
+<header>
+    <div id="header-logo">DemoShop</div>
+    <a class="header-link" href="/categories">Categories</a>
+</header>
+<main>
+    <div id="category_title"></div>
+    <div id="carts"></div>
+    <div id="total_price"></div>
+</main>
+<script>
+    loadCarts()
+</script>
+</body>
+</html>
