@@ -1,0 +1,46 @@
+#back_button {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#title {
+    margin-top: 1rem;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+#description {
+
+}
+
+#price {
+    font-weight: bold;
+}
+
+#cart {
+    margin-top: 1rem;
+    display: flex;
+    gap: 2rem;
+}
+
+#remove_from_cart {
+    display: inline;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#in_cart_count {
+    display: inline;
+    font-weight: bold;
+}
+
+#add_to_cart {
+    display: inline;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#clear_cart {
+    font-weight: bold;
+    cursor: pointer;
+}
