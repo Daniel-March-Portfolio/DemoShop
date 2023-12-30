@@ -1,5 +1,6 @@
 from django.http import HttpRequest
 from django.views import View
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import BasePermission
 from rest_framework.viewsets import ModelViewSet
 
@@ -18,6 +19,9 @@ class CartViewSet(ModelViewSet):
     permission_classes = [
         IsOwner,
     ]
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["item"]
 
     def get_queryset(self):
         return Cart.objects.filter(session_key=self.request.session.session_key).all()
