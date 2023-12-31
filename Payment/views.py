@@ -1,9 +1,8 @@
-import logging
 from uuid import UUID
 
 import stripe as stripe
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import render
 from django.views import View
 from rest_framework import mixins
@@ -11,6 +10,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from Payment.models import Payment, PAYMENT_STATUSES
 from Payment.serializers import PaymentSerializer
+from Payment.tasks import create_payment_intent
 
 
 class PaymentViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
@@ -19,7 +19,8 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.
     def perform_create(self, serializer: PaymentSerializer):
         if not self.request.session or not self.request.session.session_key:
             self.request.session.save()
-        serializer.save(session_key_id=self.request.session.session_key, status=PAYMENT_STATUSES.created)
+        payment = serializer.save(session_key_id=self.request.session.session_key, status=PAYMENT_STATUSES.created)
+        create_payment_intent.delay(payment.uuid)
 
     def get_queryset(self):
         payment_filter = (
