@@ -5,4 +5,5 @@ urlpatterns = [
     path('categories/', include('Category.api_urls')),
     path('items/', include('Item.api_urls')),
     path('carts/', include('Cart.api_urls')),
+    path('payments/', include('Payment.api_urls')),
 ]
