@@ -1,5 +1,7 @@
 let nextCartsSetUrl = `/api/carts/`;
 let totalPrice = 0
+let itemsList = []
+let cartUUIDs = []
 
 async function loadCarts() {
     if (nextCartsSetUrl !== null) {
@@ -16,12 +18,16 @@ async function loadCarts() {
         for (let newCart of newCarts) {
             let item = await loadItem(newCart["item"]);
             addCart(newCart["uuid"], item["uuid"], item["title"], item["price"], newCart["count"])
+            itemsList.push({"item": item["uuid"], "count": newCart["count"]})
+            cartUUIDs.push(newCart["uuid"])
             totalPrice += item["price"] * newCart["count"]
         }
         nextCartsSetUrl = responseData.next;
         await loadCarts();
     } else {
         document.getElementById("total_price").innerText = `Total price: $${totalPrice}`
+        document.getElementById("buy").innerText = "Buy all"
+        document.getElementById("buy").onclick = () => buy()
     }
 }
 
@@ -34,6 +40,7 @@ async function loadItem(uuid) {
     }
     return await response.json()
 }
+
 async function loadCart(uuid) {
     let response = await fetch(`/api/carts/${uuid}/`);
 
@@ -64,4 +71,33 @@ function addCart(cart_uuid, item_uuid, item_title, item_price, count) {
 
 function openItem(uuid) {
     window.location = `/items/${uuid}`
+}
+
+async function buy() {
+    let response = await fetch(`/api/payments/`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+            "items": itemsList
+        })
+    });
+
+    if (response.status !== 201) {
+        alert("Error during updating cart");
+    }
+    let responseData = await response.json()
+    for (let cartUUID of cartUUIDs) {
+        fetch(`/api/carts/${cartUUID}/`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        });
+    }
+    window.location = `/payments/${responseData["uuid"]}`
 }

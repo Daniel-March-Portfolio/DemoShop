@@ -33,6 +33,8 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.
 class PaymentView(View):
     def get(self, request: HttpRequest, uuid: UUID):
         payment = Payment.objects.get(uuid=uuid)
+        if payment.status == PAYMENT_STATUSES.created:
+            return render(request, "waiting_for_payment.html")
         if payment.status == PAYMENT_STATUSES.success:
             return self.__handle_success(request)
         stripe.api_key = settings.STRIPE_API_KEY

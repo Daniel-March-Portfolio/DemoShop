@@ -16,3 +16,9 @@
 #total_price {
   margin-top: 1rem;
 }
+
+#buy {
+  margin-top: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
