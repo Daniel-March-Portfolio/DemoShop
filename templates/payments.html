@@ -2,26 +2,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://js.stripe.com/v3/"></script>
     <meta charset="UTF-8">
-    <title>DemoShop</title>
     <link href="{% static 'css/main.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/carts.css' %}" rel="stylesheet"/>
-    <script src="{% static 'js/carts.js' %}" type="application/javascript"></script>
+    <link href="{% static 'css/payments.css' %}" rel="stylesheet"/>
     <script src="{% static 'js/main.js' %}" type="application/javascript"></script>
+    <script src="{% static 'js/payments.js' %}" type="application/javascript"></script>
+    <title>Payment</title>
 </head>
 <body>
 <header>
     <div id="header-logo">DemoShop</div>
     <a class="header-link" href="/categories">Categories</a>
-    <a class="header-link" href="/payments">Payments</a>
+    <a class="header-link" href="/carts">Cart</a>
 </header>
 <main>
-    <div id="category_title"></div>
-    <div id="carts"></div>
-    <div id="total_price"></div>
+    <div id="payments"></div>
 </main>
-<script>
-    loadCarts()
-</script>
 </body>
+<script>
+    loadPayments()
+</script>
 </html>

@@ -1,0 +1,29 @@
+#payments{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment {
+    cursor: pointer;
+    padding: 0.5rem;
+    color: white;
+    border-radius: 0.5rem;
+}
+
+.payment_price {
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.waiting{
+    background-color: #1e347b;
+}
+
+.success{
+    background-color: #2b542c;
+}
+
+.canceled{
+    background-color: #990000;
+}

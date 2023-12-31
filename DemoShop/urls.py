@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/', include('DemoShop.api_urls')),
     path('categories/', include('Category.urls')),
     path('items/', include('Item.urls')),
-    path('carts/', include('Cart.urls'))
+    path('carts/', include('Cart.urls')),
+    path('payments/', include('Payment.urls'))
 ]
