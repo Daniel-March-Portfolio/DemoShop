@@ -31,7 +31,7 @@ class Payment(models.Model):
     status = models.CharField(max_length=60, choices=_STATUSES)
 
     def __str__(self):
-        return self.uuid
+        return f"{self.uuid}"
 
 
 class PaymentItem(models.Model):
