@@ -12,6 +12,7 @@ services:
       DATABASE_PORT: ${DATABASE_PORT}
       SECRET_KEY: ${SECRET_KEY}
       STRIPE_API_KEY: ${STRIPE_API_KEY}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
       STRIPE_BACK_URL: ${DOMAIN}
     hostname: django
     depends_on:

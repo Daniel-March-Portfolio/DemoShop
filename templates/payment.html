@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://js.stripe.com/v3/"></script>
+    <meta charset="UTF-8">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/payment.css' %}" rel="stylesheet"/>
+    <script src="{% static 'js/main.js' %}" type="application/javascript"></script>
+    <title>Payment</title>
+</head>
+<body>
+<header>
+    <div id="header-logo">DemoShop</div>
+    <a class="header-link" href="/categories">Categories</a>
+    <a class="header-link" href="/carts">Cart</a>
+    <a class="header-link" href="/payments">Payments</a>
+</header>
+<main>
+    {% if canceled %}
+        <div class="canceled_payment">Canceled</div>
+    {% endif %}
+    <div id="payment"></div>
+    <button onclick="pay()">Pay</button>
+</main>
+</body>
+<script>
+    stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+    elements = stripe.elements({clientSecret: "{{payment.client_secret}}"});
+    paymentElement = elements.create('payment', {layout: 'tabs'});
+    paymentElement.mount(document.getElementById("payment"))
+
+    async function pay() {
+        await stripe.confirmPayment({
+            elements,
+            redirect: "if_required",
+            confirmParams: {
+                return_url: "{{ DOMAIN }}/payments",
+            },
+        });
+        document.location = document.location
+    }
+</script>
+</html>

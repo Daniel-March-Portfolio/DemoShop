@@ -1,3 +1,11 @@
+import logging
+from uuid import UUID
+
+import stripe as stripe
+from django.conf import settings
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
+from django.views import View
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
@@ -20,3 +28,50 @@ class PaymentViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.
             .exclude(status__in=(PAYMENT_STATUSES.created,))
         )
         return payment_filter.all()
+
+
+class PaymentView(View):
+    def get(self, request: HttpRequest, uuid: UUID):
+        payment = Payment.objects.get(uuid=uuid)
+        if payment.status == PAYMENT_STATUSES.success:
+            return self.__handle_success(request)
+        stripe.api_key = settings.STRIPE_API_KEY
+        intent = stripe.PaymentIntent.retrieve(payment.client_secret.split("_secret_")[0])
+        if intent["status"] == "succeeded":
+            payment.status = PAYMENT_STATUSES.success
+            payment.save()
+            return self.__handle_success(request)
+        if intent["status"] == "canceled":
+            payment.status = PAYMENT_STATUSES.canceled
+            payment.save()
+            return self.__handle_canceled(request, payment)
+
+        return self.__handle_waiting(request, payment)
+
+    def __handle_waiting(self, request: HttpRequest, payment: Payment):
+        return render(
+            request,
+            "payment.html",
+            {
+                "DOMAIN": settings.STRIPE_BACK_URL,
+                "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
+                "payment": payment
+            }
+        )
+
+    def __handle_success(self, request: HttpRequest):
+        return render(request, "successful_payment.html")
+
+    def __handle_canceled(self, request: HttpRequest, payment: Payment):
+        payment.status = PAYMENT_STATUSES.waiting
+        payment.save()
+        return render(
+            request,
+            "payment.html",
+            {
+                "canceled": True,
+                "DOMAIN": settings.STRIPE_BACK_URL,
+                "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
+                "payment": payment
+            }
+        )

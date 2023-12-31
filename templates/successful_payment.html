@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <link href="{% static 'css/main.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/payments.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/payment.css' %}" rel="stylesheet"/>
     <script src="{% static 'js/main.js' %}" type="application/javascript"></script>
-    <script src="{% static 'js/payments.js' %}" type="application/javascript"></script>
     <title>Payment</title>
 </head>
 <body>
@@ -14,12 +13,12 @@
     <div id="header-logo">DemoShop</div>
     <a class="header-link" href="/categories">Categories</a>
     <a class="header-link" href="/carts">Cart</a>
+    <a class="header-link" href="/payments">Payments</a>
 </header>
 <main>
-    <div id="payments"></div>
+    <div class="successful_payment">Successful</div>
 </main>
 </body>
 <script>
-    loadPayments()
 </script>
 </html>

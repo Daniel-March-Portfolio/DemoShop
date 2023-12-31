@@ -131,6 +131,10 @@ STATIC_ROOT = BASE_DIR / "static/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_BACK_URL = os.getenv("STRIPE_BACK_URL")
+
 # DRF
 
 REST_FRAMEWORK = {

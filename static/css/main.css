@@ -23,3 +23,7 @@ main {
     margin: 4rem auto auto;
     max-width: 1200px;
 }
+
+.hidden {
+    display: none;
+}

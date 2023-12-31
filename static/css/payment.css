@@ -1,0 +1,11 @@
+#payment{
+    max-width: 500px;
+}
+.successful_payment{
+    color: #2b542c;
+    font-weight: bold;
+}
+.canceled_payment{
+    color: #990000;
+    font-weight: bold;
+}
