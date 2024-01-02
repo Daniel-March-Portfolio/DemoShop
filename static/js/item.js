@@ -13,6 +13,8 @@ async function loadItem() {
     document.getElementById("title").innerText = item["title"];
     document.getElementById("description").innerText = item["description"];
     document.getElementById("price").innerText = `$${item["price"]}`;
+    document.getElementById("buy_now").innerText = `Buy now`;
+    document.getElementById("buy_now").onclick = () => buyNow()
 
     await loadCart()
 }
@@ -91,4 +93,28 @@ function updateButtons(in_cart) {
         document.getElementById("clear_cart").innerText = "Remove from cart";
         document.getElementById("clear_cart").onclick = () => clearCart(in_cart["uuid"])
     }
+}
+
+async function buyNow() {
+    let response = await fetch(`/api/payments/`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({
+                "items": [{
+                    "item": itemUUID,
+                    "count": 1
+                }]
+            }
+        )
+    });
+
+    if (response.status !== 201) {
+        alert("Error during updating cart");
+    }
+    let responseData = await response.json()
+    window.location = `/payments/${responseData["uuid"]}`
 }
