@@ -107,3 +107,29 @@ class SimpleTest(TestCase):
         self.assertNotEqual(response_data["previous"], None, response_data)
         self.assertEqual(response_data["next"], None, response_data)
         self.assertEqual(len(response_data["results"]), 1, response_data)
+
+
+class PaymentViewTest(TestCase):
+    def setUp(self) -> None:
+        self.setup_session()
+
+    def setup_session(self):
+        self.session = Session.objects.create(session_key="test_session_key",
+                                              expire_date=timezone.now() + timezone.timedelta(days=1))
+        self.client.cookies[settings.SESSION_COOKIE_NAME] = self.session.session_key
+
+    @patch("stripe.PaymentIntent.retrieve", new=lambda _: {"status": "succeeded"})
+    def test_update_on_success(self):
+        payment = Payment.objects.create(client_secret="", session_key=self.session, status=PAYMENT_STATUSES.waiting)
+        response: Response = self.client.get(f"/payments/{payment.uuid}")
+        self.assertEqual(response.status_code, 200)
+        payment = Payment.objects.get(uuid=payment.uuid)
+        self.assertEqual(payment.status, PAYMENT_STATUSES.success)
+
+    @patch("stripe.PaymentIntent.retrieve", new=lambda _: {"status": "canceled"})
+    def test_update_on_canceled(self):
+        payment = Payment.objects.create(client_secret="", session_key=self.session, status=PAYMENT_STATUSES.waiting)
+        response: Response = self.client.get(f"/payments/{payment.uuid}")
+        self.assertEqual(response.status_code, 200)
+        payment = Payment.objects.get(uuid=payment.uuid)
+        self.assertEqual(payment.status, PAYMENT_STATUSES.canceled)
