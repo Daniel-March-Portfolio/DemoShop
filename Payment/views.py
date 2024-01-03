@@ -66,8 +66,6 @@ class PaymentView(View):
         return render(request, "successful_payment.html")
 
     def __handle_canceled(self, request: HttpRequest, payment: Payment):
-        payment.status = PAYMENT_STATUSES.waiting
-        payment.save()
         return render(
             request,
             "payment.html",
